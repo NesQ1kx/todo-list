@@ -23,12 +23,15 @@ import java.util.Optional;
 
 @Service
 public class NoteService implements NoteServicable {
-    @Autowired
-    private NoteRepository notes;
-    @Autowired
-    private TagRepository tags;
-    @Autowired
-    private TagNoteRepository tagNoteRepository;
+    private final NoteRepository notes;
+    private final TagRepository tags;
+    private final TagNoteRepository tagNoteRepository;
+
+    public NoteService(NoteRepository notes, TagRepository tags, TagNoteRepository tagNoteRepository) {
+        this.notes = notes;
+        this.tags = tags;
+        this.tagNoteRepository = tagNoteRepository;
+    }
 
     @Override
     public Note get(Integer id) throws ObjectNotFoundException {
@@ -71,5 +74,10 @@ public class NoteService implements NoteServicable {
         }
 
         return notes.save(note) != null;
+    }
+
+    @Override
+    public void delete(Integer id) {
+        notes.deleteById(id);
     }
 }

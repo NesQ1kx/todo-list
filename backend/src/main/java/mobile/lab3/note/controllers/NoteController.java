@@ -18,8 +18,11 @@ import java.util.function.Consumer;
 
 @RestController
 public class NoteController extends BaseController {
-    @Autowired
-    private NoteServicable noteService;
+    private final NoteServicable noteService;
+
+    public NoteController(NoteServicable noteService) {
+        this.noteService = noteService;
+    }
 
     @GetMapping(path = "/")
     public Response index(HttpServletResponse response) {
@@ -60,4 +63,10 @@ public class NoteController extends BaseController {
         return this.error(response, 500);
     }
 
+    @GetMapping(path = "/delete")
+    public Response delete(@RequestParam Integer id, HttpServletResponse response) {
+        this.noteService.delete(id);
+
+        return this.success(response, "Дело сделано");
+    }
 }

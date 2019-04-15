@@ -13,4 +13,5 @@ public interface NoteServicable {
     Iterable<Note> findAll();
 
     boolean add(AddNoteModel model) throws ValidationException;
+    void delete(Integer id);
 }
