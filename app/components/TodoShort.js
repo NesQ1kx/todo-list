@@ -3,8 +3,9 @@ import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 
 export default class TodoShort extends React.Component {
     render() {
+        const { navigate } = this.props.navigation;
         return(
-            <TouchableHighlight  onPress={() => console.log('hi')}>
+            <TouchableHighlight  onPress={() => navigate('Todo', {id: this.props.item.id})}>
                 <View style={styles.container}>
                     <Text style={styles.item}>{this.props.item.date}</Text>
                     <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.props.item.title}</Text>

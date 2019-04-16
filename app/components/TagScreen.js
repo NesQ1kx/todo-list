@@ -1,20 +1,19 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, TextInput, ScrollView } from 'react-native';
+import {StyleSheet, Text, View, TouchableHighlight, ScrollView, TextInput} from 'react-native';
 
-export default class TodoScreen extends React.Component {
+export default class TagScreen extends React.Component {
     constructor(props) {
         super(props);
         this.navigation = this.props.navigation;
         this.state = {id: this.navigation.getParam('id')};
     }
 
-    removeTodo() {
+    removeTag() {
         this.navigateToHomeScreen();
     }
 
-    saveTodo() {
+    saveTag() {
         this.navigateToHomeScreen();
-
     }
 
     cancel() {
@@ -25,11 +24,11 @@ export default class TodoScreen extends React.Component {
         this.navigation.navigate('Home');
     }
     render() {
-        return (
+        return(
             <View style={{flex: 1}}>
                 <ScrollView>
                     <View style={styles.container}>
-                        <TouchableHighlight onPress={this.removeTodo.bind(this)} disabled={!this.state.id}>
+                        <TouchableHighlight onPress={this.removeTag.bind(this)} disabled={!this.state.id}>
                             <View style={this.state.id ? styles.removeBtn : styles.removeBtnDisabled}>
                                 <Text style={{fontSize: 20, color: '#fff'}}>
                                     Удалить
@@ -37,23 +36,13 @@ export default class TodoScreen extends React.Component {
                             </View>
                         </TouchableHighlight>
                         <View style={styles.itemInput}>
-                            <Text style={{fontSize: 20}}>Дата</Text>
+                            <Text style={{fontSize: 20}}>Текст тега</Text>
                             <TextInput style={styles.input}/>
-                        </View>
-                        <View style={styles.itemInput}>
-                            <Text style={{fontSize: 20}}>Заголовок</Text>
-                            <TextInput style={styles.input}/>
-                        </View>
-                        <View style={styles.itemInput}>
-                            <Text style={{fontSize: 20}}>Текст заметки</Text>
-                            <TextInput style={{borderWidth: 1, height: 150}}
-                                       multiline={true}
-                                       numberOfLines={5}/>
                         </View>
                     </View>
                 </ScrollView>
                 <View style={styles.btnContainer}>
-                    <TouchableHighlight onPress={this.saveTodo.bind(this)}>
+                    <TouchableHighlight onPress={this.saveTag.bind(this)}>
                         <View style={styles.button}>
                             <Text style={{fontSize: 20, color: '#fff'}}>
                                 Сохранить
@@ -69,7 +58,7 @@ export default class TodoScreen extends React.Component {
                     </TouchableHighlight>
                 </View>
             </View>
-        );
+        )
     }
 }
 
