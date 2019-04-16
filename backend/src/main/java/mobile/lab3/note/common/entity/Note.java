@@ -3,6 +3,7 @@ package mobile.lab3.note.common.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mobile.lab3.note.common.viewmodels.EditNoteModel;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -35,7 +36,7 @@ public class Note implements Serializable {
     @Column(name = "created_at")
     private Timestamp created_at;
 
-    @OneToMany(mappedBy = "note")
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "note")
     private Set<NoteTag> tags;
 
     public NoteTag addTag(Tags tag) {
@@ -46,4 +47,12 @@ public class Note implements Serializable {
         return noteTag;
     }
 
+    public void edit(EditNoteModel model) {
+        this.title = model.getTitle();
+        this.text = model.getText();
+    }
+
+    public void clearTags() {
+        this.tags.clear();
+    }
 }

@@ -5,14 +5,13 @@ import mobile.lab3.note.common.exceptions.ObjectNotFoundException;
 import mobile.lab3.note.common.responsemodels.NoteResponseModel;
 import mobile.lab3.note.common.responses.Response;
 import mobile.lab3.note.common.viewmodels.AddNoteModel;
+import mobile.lab3.note.common.viewmodels.EditNoteModel;
 import mobile.lab3.note.servicescontracts.NoteServicable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -58,6 +57,21 @@ public class NoteController extends BaseController {
             }
         } catch (ValidationException e) {
             return this.error(response, 400, e.getMessage());
+        }
+
+        return this.error(response, 500);
+    }
+
+    @PostMapping(path = "edit")
+    public Response edit(@RequestBody EditNoteModel model, HttpServletResponse response) {
+        try {
+            if(noteService.edit(model)) {
+                return this.success(response, "Успешно", 200);
+            }
+        } catch (ObjectNotFoundException e) {
+            return this.error(response, 404, e.getMessage());
+        } catch (ValidationException e) {
+            return this.error(response, 400, e.getLocalizedMessage());
         }
 
         return this.error(response, 500);

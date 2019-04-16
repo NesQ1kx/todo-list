@@ -22,7 +22,7 @@ public class NoteTag implements Serializable {
     @JoinColumn(name = "note_id")
     private Note note;
 
-    @ManyToOne(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
     private Tags tag;
 }
