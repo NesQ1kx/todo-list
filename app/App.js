@@ -68,8 +68,10 @@ const TabNavigator = createMaterialTopTabNavigator({
     }
 });
 
-export default createAppContainer(createStackNavigator({
+const StackNavigator = createStackNavigator({
     Home: TabNavigator,
     Todo: TodoScreen,
     Tag: TagScreen
-}));
+});
+
+export default createAppContainer(StackNavigator);
