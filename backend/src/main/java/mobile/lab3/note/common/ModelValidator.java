@@ -4,10 +4,8 @@ import javax.validation.*;
 import java.util.Set;
 
 public class ModelValidator<T> {
-    public void validate(T model) throws  ValidationException {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Validator validator = factory.getValidator();
-
+    public void validate(T model) throws ValidationException {
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
         Set<ConstraintViolation<T>> violations = validator.validate(model);
 
         for (ConstraintViolation<T> violation : violations) {
