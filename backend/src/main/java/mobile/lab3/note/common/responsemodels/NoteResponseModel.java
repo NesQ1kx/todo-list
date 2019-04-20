@@ -18,11 +18,11 @@ public class NoteResponseModel {
     private Integer id;
     private String title;
     private String text;
-    private Date created_at;
+    private Long created_at;
     private Set<TagResponseModel> tags;
 
     public NoteResponseModel(Note note) {
-     this.created_at = new Date(note.getCreated_at().getTime());
+     this.created_at = note.getCreated_at().getTime();
      this.text = note.getText();
      this.id = note.getId();
      this.title = note.getTitle();
