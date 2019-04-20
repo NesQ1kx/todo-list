@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @RestController
+@CrossOrigin(origins = "*")
 public class NoteController extends BaseController {
     private final NoteServicable noteService;
 

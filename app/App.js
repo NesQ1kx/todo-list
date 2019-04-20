@@ -1,26 +1,43 @@
 import React from 'react';
-import {StyleSheet, ScrollView, View, TouchableHighlight, Text} from 'react-native';
+import {StyleSheet, ScrollView, View, TouchableHighlight, Text, ActivityIndicator} from 'react-native';
 import {createMaterialTopTabNavigator, createAppContainer, createStackNavigator} from 'react-navigation';
 import TodoShort from "./components/TodoShort";
 import {mockShort} from "./mock";
 import TagsListScreen from "./components/TagsListScreen";
 import TodoScreen from "./components/TodoScreen";
 import TagScreen from "./components/TagScreen";
+import {httpClient} from "./services/http-client";
+import {ENDPOINTS} from "./constants/url.constants";
 
 class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {notes: [], isDataLoaded: false};
+        this.navigation = this.props.navigation;
+        const willFocus = this.navigation.addListener('willFocus', () => this.fetchData());
+    }
+
+    fetchData() {
+        httpClient.get(ENDPOINTS.GET_NOTES).then(data => {
+            this.setState({notes: data.data.body, isDataLoaded: true});
+        });
+    }
+
     render() {
-        const { navigation} = this.props;
-        const todoesShort = mockShort.map((item, index) =>
-            <TodoShort navigation={navigation} key={index} item={item}/>
+        const notesShort = this.state.notes.map((item, index) =>
+            <TodoShort navigation={this.navigation} key={index} item={item}/>
         );
         return (
-            <View>
+            <View style={{flex: 1}}>
                 <ScrollView>
-                    <View style={styles.container}>
-                        {todoesShort}
-                    </View>
+                    {!this.state.isDataLoaded && <View style={{marginTop: 10}}>
+                        <ActivityIndicator size="large" color="#0000ff"/>
+                    </View>}
+                    {this.state.notes && <View style={styles.container}>
+                        {notesShort}
+                    </View>}
                 </ScrollView>
-                <TouchableHighlight onPress={() => navigation.navigate('Todo', {name: ''})}>
+                <TouchableHighlight onPress={() => this.navigation.navigate('Todo', {item: {}})}>
                     <View style={styles.button}>
                         <Text style={{fontSize: 20, color: '#fff'}}>
                             НОВАЯ ЗАМЕТКА

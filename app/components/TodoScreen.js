@@ -1,20 +1,44 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TextInput, ScrollView } from 'react-native';
+import {httpClient} from "../services/http-client";
+import {ENDPOINTS} from "../constants/url.constants";
 
 export default class TodoScreen extends React.Component {
     constructor(props) {
         super(props);
         this.navigation = this.props.navigation;
-        this.state = {id: this.navigation.getParam('id')};
+        this.state = {id: this.navigation.getParam('item').id,
+                      title: this.navigation.getParam('item').title,
+                      text: this.navigation.getParam('item').text,
+                      tagsIds: this.navigation.getParam('item').tags,
+                      created_at: this.navigation.getParam('item').created_at
+        }
     }
 
     removeTodo() {
-        this.navigateToHomeScreen();
+        httpClient.get(`${ENDPOINTS.DELETE_NOTE}?id=${this.state.item.id}`)
+            .then(response => this.navigateToHomeScreen());
     }
 
     saveTodo() {
-        this.navigateToHomeScreen();
-
+        if (!this.state.id) {
+            const data = {
+                tagsIds: this.state.tags,
+                text: this.state.text,
+                title: this.state.title
+            };
+            httpClient.post(ENDPOINTS.ADD_NOTE, JSON.stringify(data))
+                .then(response => this.navigateToHomeScreen());
+        } else {
+            const data = {
+                id: this.state.id,
+                tagsIds: this.state.tags,
+                text: this.state.text,
+                title: this.state.title
+            };
+            httpClient.post(ENDPOINTS.EDIT_NOTE, JSON.stringify(data))
+                .then(response => this.navigateToHomeScreen());
+        }
     }
 
     cancel() {
@@ -24,6 +48,7 @@ export default class TodoScreen extends React.Component {
     navigateToHomeScreen() {
         this.navigation.navigate('Home');
     }
+
     render() {
         return (
             <View style={{flex: 1}}>
@@ -38,17 +63,25 @@ export default class TodoScreen extends React.Component {
                         </TouchableHighlight>
                         <View style={styles.itemInput}>
                             <Text style={{fontSize: 20}}>Дата</Text>
-                            <TextInput style={styles.input}/>
+                            <TextInput style={styles.input}
+                                        value={this.state.created_at ?
+                                            new Date(this.state.created_at).toLocaleDateString() :
+                                            ''}
+                                        onTextChange={(text) => this.setState({created_at: text})}/>
                         </View>
                         <View style={styles.itemInput}>
                             <Text style={{fontSize: 20}}>Заголовок</Text>
-                            <TextInput style={styles.input}/>
+                            <TextInput style={styles.input}
+                                        value={this.state.title}
+                                        onChangeText={(text) =>this.setState({title: text})}/>
                         </View>
                         <View style={styles.itemInput}>
                             <Text style={{fontSize: 20}}>Текст заметки</Text>
                             <TextInput style={{borderWidth: 1, height: 150}}
                                        multiline={true}
-                                       numberOfLines={5}/>
+                                       value={this.state.text}
+                                       numberOfLines={5}
+                                       onChangeText={(text) => this.setState({text: text})}/>
                         </View>
                     </View>
                 </ScrollView>

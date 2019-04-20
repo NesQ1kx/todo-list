@@ -5,12 +5,12 @@ export default class TodoShort extends React.Component {
     render() {
         const { navigate } = this.props.navigation;
         return(
-            <TouchableHighlight  onPress={() => navigate('Todo', {id: this.props.item.id})}>
+            <TouchableHighlight  onPress={() => navigate('Todo', {item: this.props.item})}>
                 <View style={styles.container}>
-                    <Text style={styles.item}>{this.props.item.date}</Text>
+                    <Text style={styles.item}>{new Date(this.props.item.created_at).toLocaleDateString()}</Text>
                     <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.props.item.title}</Text>
                     <Text numberOfLines={1} style={styles.item}>{this.props.item.text}</Text>
-                    <Text style={{fontSize: 20, fontStyle: 'italic'}}>Теги: {this.props.item.tags.join(', ')}</Text>
+                    <Text style={{fontSize: 20, fontStyle: 'italic'}}>Теги: {this.props.item.tags}</Text>
                 </View>
             </TouchableHighlight>
         )
@@ -20,7 +20,7 @@ export default class TodoShort extends React.Component {
 const styles = StyleSheet.create({
     container: {
         marginTop: 15,
-        width: '90%',
+        minWidth: '90%',
         borderRadius: 4,
         borderWidth: 1,
         flexDirection: 'column',
