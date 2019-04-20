@@ -43,7 +43,7 @@ public class TagController extends BaseController{
     public Response addTag(HttpServletResponse response, @RequestBody AddTagModel model) {
         try {
             if(tags.add(model)) {
-                return this.success(response, 201);
+                return this.success(response, "Успешно", 201);
             }
         } catch (ValidationException e) {
             return this.error(response, 400, e.getMessage());
