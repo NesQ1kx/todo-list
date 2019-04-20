@@ -12,8 +12,10 @@ import java.util.Optional;
 public interface NoteServicable {
     Note get(Integer id) throws ObjectNotFoundException;
     Iterable<Note> findAll();
+    Iterable<Note> findByTag(Integer tagId) throws ObjectNotFoundException;
 
     boolean add(AddNoteModel model) throws ValidationException;
     boolean edit(EditNoteModel model) throws ValidationException, ObjectNotFoundException;
     void delete(Integer id);
+
 }

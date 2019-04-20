@@ -55,6 +55,27 @@ public class NoteService implements NoteServicable {
     }
 
     @Override
+    public Iterable<Note> findByTag(Integer tagId) throws ObjectNotFoundException {
+        Optional<Tags> targetTag = tags.findById(tagId);
+        if (!targetTag.isPresent()) {
+            throw new ObjectNotFoundException();
+        }
+
+        Tags tag = targetTag.get();
+
+        List<Note> targetNotes = new ArrayList<>();
+
+        tag.getNotes().forEach(new Consumer<NoteTag>() {
+            @Override
+            public void accept(NoteTag noteTag) {
+                targetNotes.add(noteTag.getNote());
+            }
+        });
+
+        return targetNotes;
+    }
+
+    @Override
     public boolean add(AddNoteModel model) throws ValidationException {
         ModelValidator<AddNoteModel> validator = new ModelValidator<>();
         validator.validate(model);
@@ -115,6 +136,7 @@ public class NoteService implements NoteServicable {
             @Override
             public void accept(NoteTag noteTag) {
                 noteTag.setNote(null);
+                noteTag.setTag(null);
                 tagNoteRepository.save(noteTag); // TODO: Грязный, мерзкий лайфхак для удаления старых ассоциаций тегов. Надо подключить EntityManager и удалять их через транзакции
             }
         });

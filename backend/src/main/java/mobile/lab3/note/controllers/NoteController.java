@@ -33,14 +33,7 @@ public class NoteController extends BaseController {
     public Response get(@RequestParam(required = false) Integer id, HttpServletResponse response) {
         if (id == null) {
             Iterable<Note> notes = noteService.findAll();
-            List<NoteResponseModel> responseNote = new ArrayList<>();
-            notes.forEach(new Consumer<Note>() {
-                @Override
-                public void accept(Note note) {
-                    responseNote.add(new NoteResponseModel(note));
-                }
-            });
-            return this.success(response, responseNote);
+            return this.success(response, createResponseNote(notes));
         }
 
         try {
@@ -83,5 +76,32 @@ public class NoteController extends BaseController {
         this.noteService.delete(id);
 
         return this.success(response, "Дело сделано");
+    }
+
+    @GetMapping(path = "/fetch-tag")
+    public Response fetchByTag(HttpServletResponse response, @RequestParam Integer tagId) {
+        Iterable<Note> notes = null;
+        try {
+            notes = noteService.findByTag(tagId);
+        } catch (ObjectNotFoundException e) {
+            return this.error(response, 404);
+        }
+
+        return this.success(response, createResponseNote(notes));
+    }
+
+    private List<NoteResponseModel> createResponseNote(Iterable<Note> notesIt) {
+        List<NoteResponseModel> responseNote = new ArrayList<>();
+        notesIt.forEach(new Consumer<Note>() {
+            @Override
+            public void accept(Note note) {
+                if (note != null) {
+                    responseNote.add(new NoteResponseModel(note));
+                }
+
+            }
+        });
+
+        return  responseNote;
     }
 }

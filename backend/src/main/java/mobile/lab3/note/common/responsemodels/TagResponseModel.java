@@ -10,7 +10,7 @@ public class TagResponseModel {
     private Integer id;
     private String name;
 
-    TagResponseModel(Tags tag) {
+    public TagResponseModel(Tags tag) {
         this.id = tag.getId();
         this.name = tag.getName();
     }
