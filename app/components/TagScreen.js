@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View, TouchableHighlight, ScrollView, TextInput} from 'react-native';
+import {StyleSheet, Text, View, TouchableHighlight, ScrollView, TextInput, Alert} from 'react-native';
 import {httpClient} from "../services/http-client";
 import {ENDPOINTS} from "../constants/url.constants";
 import TodoShort from "./TodoShort";
@@ -15,8 +15,10 @@ export default class TagScreen extends React.Component {
     }
 
     componentWillMount() {
-        httpClient.get(`${ENDPOINTS.GET_NOTES_BY_TAG}?tagId=${this.state.id}`)
-            .then((data) => this.setState({notes: data.data.body}));
+        if(this.state.id) {
+            httpClient.get(`${ENDPOINTS.GET_NOTES_BY_TAG}?tagId=${this.state.id}`)
+                .then((data) => this.setState({notes: data.data.body}));
+        }
     }
 
     removeTag() {
@@ -42,7 +44,8 @@ export default class TagScreen extends React.Component {
     navigateToHomeScreen() {
         this.navigation.navigate('Home');
     }
-    render() {
+
+    render(title, message) {
         const notesShort = this.state.notes.map((item, index) =>
             <TodoShort navigation={this.navigation} key={index} item={item}/>
         );
@@ -64,7 +67,7 @@ export default class TagScreen extends React.Component {
                                 onChangeText={(text) => this.setState({name: text})}
                             />
                         </View>
-                        <Text>Заметки с тегом</Text>
+                        {this.state.id && <Text>Заметки с тегом</Text>}
                         {notesShort}
                     </View>
                 </ScrollView>
