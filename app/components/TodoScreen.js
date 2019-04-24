@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TextInput, ScrollView } from 'react-native';
-import {httpClient} from "../services/http-client";
-import {ENDPOINTS} from "../constants/url.constants";
+import { httpClient}  from "../services/http-client";
+import { ENDPOINTS } from "../constants/url.constants";
 
 export default class TodoScreen extends React.Component {
     constructor(props) {
@@ -12,11 +12,11 @@ export default class TodoScreen extends React.Component {
                       text: this.navigation.getParam('item').text,
                       tagsIds: this.navigation.getParam('item').tags,
                       created_at: this.navigation.getParam('item').created_at
-        }
+        };
     }
 
     removeTodo() {
-        httpClient.get(`${ENDPOINTS.DELETE_NOTE}?id=${this.state.item.id}`)
+        httpClient.get(`${ENDPOINTS.DELETE_NOTE}?id=${this.state.id}`)
             .then(response => this.navigateToHomeScreen());
     }
 
@@ -64,6 +64,7 @@ export default class TodoScreen extends React.Component {
                         <View style={styles.itemInput}>
                             <Text style={{fontSize: 20}}>Дата</Text>
                             <TextInput style={styles.input}
+                                        disabled={true}
                                         value={this.state.created_at ?
                                             new Date(this.state.created_at).toLocaleDateString() :
                                             ''}

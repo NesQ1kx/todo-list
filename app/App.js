@@ -2,7 +2,6 @@ import React from 'react';
 import {StyleSheet, ScrollView, View, TouchableHighlight, Text, ActivityIndicator} from 'react-native';
 import {createMaterialTopTabNavigator, createAppContainer, createStackNavigator} from 'react-navigation';
 import TodoShort from "./components/TodoShort";
-import {mockShort} from "./mock";
 import TagsListScreen from "./components/TagsListScreen";
 import TodoScreen from "./components/TodoScreen";
 import TagScreen from "./components/TagScreen";
@@ -12,15 +11,16 @@ import {ENDPOINTS} from "./constants/url.constants";
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {notes: [], isDataLoaded: false};
+        this.state = {notes: [], isDataLoaded: false, tags: []};
         this.navigation = this.props.navigation;
-        const willFocus = this.navigation.addListener('willFocus', () => this.fetchData());
+        const willFocus = this.navigation.addListener('willFocus', () => this._fetchData());
     }
 
-    fetchData() {
+    _fetchData() {
         httpClient.get(ENDPOINTS.GET_NOTES).then(data => {
             this.setState({notes: data.data.body, isDataLoaded: true});
         });
+
     }
 
     render() {

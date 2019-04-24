@@ -5,9 +5,9 @@ export default class TagShort extends React.Component {
     render() {
         const { navigation } = this.props;
         return(
-            <TouchableHighlight onPress={() => navigation.navigate('Tag', {id: this.props.item.id})}>
+            <TouchableHighlight onPress={() => navigation.navigate('Tag', {item: this.props.item})}>
                 <View style={styles.container}>
-                    <Text style={{fontSize: 20, color: '#fff'}}>{this.props.item.title}</Text>
+                    <Text style={{fontSize: 20, color: '#fff'}}>{this.props.item.name}</Text>
                 </View>
             </TouchableHighlight>
         )

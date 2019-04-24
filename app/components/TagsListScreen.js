@@ -1,14 +1,27 @@
 import React from 'react';
 import {StyleSheet, Text, View, ScrollView, TouchableHighlight} from 'react-native';
-import {mockTags} from "../mock";
 import TagShort from "./TagShort";
+import {httpClient} from "../services/http-client";
+import {ENDPOINTS} from "../constants/url.constants";
 
 
 export default class TagsListScreen extends React.Component {
+    constructor(props) {
+        super(props);
+        this.navigation = this.props.navigation;
+        this.state = {tags: []};
+        const willFocus = this.navigation.addListener('willFocus', () => this._fetchData());
+    }
+
+    _fetchData() {
+        httpClient.get(ENDPOINTS.GET_ALL_TAGS).then(data => {
+            this.setState({tags: data.data.body});
+        });
+    }
+
     render() {
-        const { navigation} = this.props;
-        const tagsShort = mockTags.map((item, index) =>
-            <TagShort navigation={navigation} key={index} item={item}/>
+        const tagsShort = this.state.tags.map((item, index) =>
+            <TagShort navigation={this.navigation} key={index} item={item}/>
         );
         return (
             <View style={{flex: 1}}>
@@ -17,7 +30,7 @@ export default class TagsListScreen extends React.Component {
                         {tagsShort}
                     </View>
                 </ScrollView>
-                <TouchableHighlight onPress={() => navigation.navigate('Tag', {id: ''})}>
+                <TouchableHighlight onPress={() => this.navigation.navigate('Tag', {item: {}})}>
                     <View style={styles.button}>
                         <Text style={{fontSize: 20, color: '#fff'}}>
                             НОВЫЙ ТЕГ

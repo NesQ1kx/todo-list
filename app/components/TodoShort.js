@@ -2,6 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 
 export default class TodoShort extends React.Component {
+    constructor(props) {
+        super(props);
+        this.tags = '';
+        if (this.props.item.tags) {
+            this.props.item.tags.forEach(tag => {
+                this.tags += tag.name;
+            })
+        }
+    }
     render() {
         const { navigate } = this.props.navigation;
         return(
@@ -10,7 +19,7 @@ export default class TodoShort extends React.Component {
                     <Text style={styles.item}>{new Date(this.props.item.created_at).toLocaleDateString()}</Text>
                     <Text style={{fontSize: 20, fontWeight: 'bold'}}>{this.props.item.title}</Text>
                     <Text numberOfLines={1} style={styles.item}>{this.props.item.text}</Text>
-                    <Text style={{fontSize: 20, fontStyle: 'italic'}}>Теги: {this.props.item.tags}</Text>
+                    <Text style={{fontSize: 20, fontStyle: 'italic'}}>Теги: {this.tags}</Text>
                 </View>
             </TouchableHighlight>
         )
