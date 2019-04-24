@@ -22,6 +22,6 @@ public class Tags implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "tag")
+    @OneToMany(cascade=CascadeType.ALL, mappedBy = "tag")
     private Set<NoteTag> notes;
 }
