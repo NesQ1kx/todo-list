@@ -5,10 +5,7 @@ import mobile.lab3.note.common.responsemodels.TagResponseModel;
 import mobile.lab3.note.common.responses.Response;
 import mobile.lab3.note.common.viewmodels.AddTagModel;
 import mobile.lab3.note.servicescontracts.TagServicable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
@@ -50,6 +47,13 @@ public class TagController extends BaseController{
         }
 
         return this.error(response, 500, "Что-то пошло не так");
+    }
+
+    @GetMapping(path = "/tags/delete")
+    public Response delete(@RequestParam Integer id, HttpServletResponse response) {
+        this.tags.delete(id);
+
+        return this.success(response, "Дело сделано");
     }
 
 }

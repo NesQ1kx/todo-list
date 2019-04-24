@@ -33,4 +33,9 @@ public class TagService implements TagServicable {
 
         return !(tags.save(tag) == null);
     }
+
+    @Override
+    public void delete(Integer id) {
+        tags.deleteById(id);
+    }
 }
